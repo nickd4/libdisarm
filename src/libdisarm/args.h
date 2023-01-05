@@ -102,6 +102,10 @@ typedef struct {
 	da_uint_t flags;
 	da_reg_t rn;
 	da_reg_t rd;
+#if 1 // Nick
+	da_uint_t imm_byte;
+	da_uint_t imm_rot;
+#endif
 	da_uint_t imm;
 } da_args_data_imm_t;
 
@@ -262,6 +266,10 @@ typedef struct {
 	da_cond_t cond;
 	da_uint_t r;
 	da_uint_t mask;
+#if 1 // Nick
+	da_uint_t imm_byte;
+	da_uint_t imm_rot;
+#endif
 	da_uint_t imm;
 } da_args_msr_imm_t;
 

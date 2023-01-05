@@ -130,10 +130,19 @@ da_instr_parse_args(da_instr_args_t *args, const da_instr_t *instr)
 		args->data_imm.flags = DA_ARG_BOOL(instr, 20);
 		args->data_imm.rn = DA_ARG_REG(instr, 16);
 		args->data_imm.rd = DA_ARG_REG(instr, 12);
+#if 1 // Nick
+		args->data_imm.imm_byte = DA_ARG(instr, 0, 0xff);
+		args->data_imm.imm_rot = DA_ARG(instr, 8, 0xf) << 1;
+		args->data_imm.imm = (args->data_imm.imm_byte >>
+				      args->data_imm.imm_rot) |
+			(args->data_imm.imm_byte <<
+			 (32 - args->data_imm.imm_rot));
+#else
 		args->data_imm.imm = (DA_ARG(instr, 0, 0xff) >>
 				      (DA_ARG(instr, 8, 0xf) << 1)) |
 			(DA_ARG(instr, 0, 0xff) <<
 			 (32 - (DA_ARG(instr, 8, 0xf) << 1)));
+#endif
 		break;
 	case DA_GROUP_DATA_IMM_SH:
 		args->data_imm_sh.cond = DA_ARG_COND(instr, 28);
@@ -281,10 +290,19 @@ da_instr_parse_args(da_instr_args_t *args, const da_instr_t *instr)
 		args->msr_imm.cond = DA_ARG_COND(instr, 28);
 		args->msr_imm.r = DA_ARG_BOOL(instr, 22);
 		args->msr_imm.mask = DA_ARG(instr, 16, 0xf);
+#if 1 // Nick
+		args->msr_imm.imm_byte = DA_ARG(instr, 0, 0xff);
+		args->msr_imm.imm_rot = DA_ARG(instr, 8, 0xf) << 1;
+		args->msr_imm.imm = (args->msr_imm.imm_byte >>
+				     args->msr_imm.imm_rot) |
+			(args->msr_imm.imm_byte <<
+			 (32 - args->msr_imm.imm_rot));
+#else
 		args->msr_imm.imm = (DA_ARG(instr, 0, 0xff) >>
 				     (DA_ARG(instr, 8, 0xf) << 1)) |
 			(DA_ARG(instr, 0, 0xff) <<
 			 (32 - (DA_ARG(instr, 8, 0xf) << 1)));
+#endif
 		break;
 	case DA_GROUP_MUL:
 		args->mul.cond = DA_ARG_COND(instr, 28);

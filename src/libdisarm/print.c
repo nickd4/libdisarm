@@ -179,7 +179,11 @@ da_instr_fprint_data_imm(FILE *f, const da_instr_t *instr,
 		fprintf(f, "r%d, r%d", args->rd, args->rn);
 	}
 
+#if 1 // Nick
+	fprintf(f, ", #0x%x, #0x%x", args->imm_byte, args->imm_rot);
+#else
 	fprintf(f, ", #0x%x", args->imm);
+#endif
 
 	if (args->rn == DA_REG_R15) {
 		if (args->op == DA_DATA_OP_ADD) {
@@ -473,10 +477,17 @@ static void
 da_instr_fprint_msr_imm(FILE *f, const da_instr_t *instr,
 			const da_args_msr_imm_t *args, da_addr_t addr)
 {
+#if 1 // Nick
+	fprintf(f, "msr%s\t%s_%s%s%s%s, #0x%x, #0x%x", da_cond_map[args->cond],
+		(args->r ? "SPSR" : "CPSR"), ((args->mask & 1) ? "c" : ""),
+		((args->mask & 2) ? "x" : ""), ((args->mask & 4) ? "s" : ""),
+		((args->mask & 8) ? "f" : ""), args->imm_byte, args->imm_rot);
+#else
 	fprintf(f, "msr%s\t%s_%s%s%s%s, #0x%x", da_cond_map[args->cond],
 		(args->r ? "SPSR" : "CPSR"), ((args->mask & 1) ? "c" : ""),
 		((args->mask & 2) ? "x" : ""), ((args->mask & 4) ? "s" : ""),
 		((args->mask & 8) ? "f" : ""), args->imm);
+#endif
 }
 
 static void
