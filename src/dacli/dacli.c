@@ -148,6 +148,31 @@ main(int argc, char *argv[])
 			}
 		}
 	}
+#if 1 // Nick
+	else {
+		for (int i = 0; i < 0x1000; ++i) {
+			for (int j = 0; j < 0x10; ++j) {
+				da_word_t data = (i << 20) | (j << 4);
+				printf("opcodes %08x\n", data);
+				for (int k = -1; k < 20; ++k) {
+					if (k == 4)
+						k = 8;
+
+					da_instr_t instr;
+					da_instr_args_t args;
+					da_instr_parse(&instr, data | (k >= 0 ? ((da_word_t)1 << k) : 0), big_endian);
+					da_instr_parse_args(&args, &instr);
+
+					printf("%08x\t", instr.data);
+					da_instr_fprint(stdout, &instr, &args, 0);
+					printf("\n");
+				}
+				printf("\n");
+			}
+		}
+		exit(EXIT_SUCCESS);
+	}
+#endif
 
 	da_addr_t addr = mem_offset;
 
