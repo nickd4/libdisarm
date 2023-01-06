@@ -12,7 +12,7 @@ import sys
 instructions = {}
 for line in sys.stdin:
   line = line.rstrip()
-  if len(line) and line[:8] != 'opcodes ':
+  if len(line) and line[:8] != 'opcodes ' and line[9:18] != 'undefined':
     fields = line.split('\t')
     opcode = int(fields[0], 16)
     mnemonic = fields[1]
@@ -50,9 +50,9 @@ for (mnemonic, arguments), instructions1 in sorted(instructions.items()):
   print(
     'opcodes',
     mnemonic,
-    arguments,
-    hex(opcode_min),
-    hex(operand_bits ^ 0xffffffff)
+    arguments if len(arguments) else '_',
+    f'{opcode_min:08x}',
+    f'{operand_bits ^ 0xffffffff:08x}'
   )
   opcodes = {opcode_min}
   for i in range(0x20):
